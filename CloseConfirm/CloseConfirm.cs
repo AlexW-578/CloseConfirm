@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using BaseX;
-using HarmonyLib;
+﻿using HarmonyLib;
 using NeosModLoader;
 using FrooxEngine;
-using FrooxEngine.UIX;
 
 namespace CloseConfirm
 {
@@ -58,7 +53,6 @@ namespace CloseConfirm
                     dash.Target.CurrentScreen.Target = exit;
                     await new NextUpdate();
                     Warn("Not Closing ");
-
                 });
                 return false;
             }
