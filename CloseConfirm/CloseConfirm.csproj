@@ -6,13 +6,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModNameGoesHere</RootNamespace>
-    <AssemblyName>ModNameGoesHere</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>CloseConfirm</RootNamespace>
+    <AssemblyName>CloseConfirm</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
-    <ProjectGuid>{47561A7C-DA9A-4362-877E-BBFD35328A2B}</ProjectGuid>
+    <ProjectGuid>{2E8B3126-B0E7-4240-993C-AC2B761989F4}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,9 +54,12 @@
       <HintPath>$(NeosPath)\Libraries\NeosModLoader.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Apps\Neos\app\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModNameGoesHere.cs" />
+    <Compile Include="CloseConfirm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
