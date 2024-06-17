@@ -41,6 +41,7 @@ namespace CloseConfirm
                 }
                 if (Config.GetValue(ManualClose))
                 {
+                    Warn("Manual Close Detected - Closing Game.");
                     return true;
                 }
                 UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
