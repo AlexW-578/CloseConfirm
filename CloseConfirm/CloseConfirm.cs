@@ -1,14 +1,14 @@
 ﻿using HarmonyLib;
-using NeosModLoader;
+using ResoniteModLoader;
 using FrooxEngine;
 
 namespace CloseConfirm
 {
-    public class CloseConfirm : NeosMod
+    public class CloseConfirm : ResoniteMod
     {
         public override string Name => "CloseConfirm";
         public override string Author => "AlexW-578";
-        public override string Version => "1.0.0";
+        public override string Version => "1.1.0";
         public override string Link => "https://github.com/AlexW-578/CloseConfirm/";
         private static ModConfiguration Config;
 
@@ -52,16 +52,16 @@ namespace CloseConfirm
                     ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
                     dash.Target.CurrentScreen.Target = exit;
                     await new NextUpdate();
-                    Warn("Not Closing ");
+                    Warn("Not Closing");
                 });
                 return false;
             }
         }
 
-        [HarmonyPatch(typeof(NeosEnder), "OnAttach")]
+        [HarmonyPatch(typeof(AppEnder), "OnAttach")]
         class Confirm_Patch
         {
-            public static void Postfix(NeosEnder __instance)
+            public static void Postfix(AppEnder __instance)
             {
                 Config.Set(ManualClose,true);
             }
