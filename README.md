@@ -4,6 +4,8 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 
 This stops the close button on the window as well as alt-f4 from closing the game but rather opening up the dash to the exit game screen.
 
+This does not properly prevent closing the app via the task manager, if you need to force close the game.
+
 ## Installation
 1. Install [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader).
 1. Place [CloseConfirm.dll](https://github.com/AlexW-578/CloseConfirm/releases/latest/download/CloseConfirm.dll) into your `rml_mods` folder. This folder should be at `C:\Program Files (x86)\Steam\steamapps\common\Resonite\rml_mods` for a default install. You can create it if it's missing, or if you launch the game once with ResoniteModLoader installed it will create the folder for you.
