@@ -1,14 +1,14 @@
 ﻿using HarmonyLib;
-using NeosModLoader;
+using ResoniteModLoader;
 using FrooxEngine;
 
 namespace CloseConfirm
 {
-    public class CloseConfirm : NeosMod
+    public class CloseConfirm : ResoniteMod
     {
         public override string Name => "CloseConfirm";
         public override string Author => "AlexW-578";
-        public override string Version => "1.0.0";
+        public override string Version => "1.1.0";
         public override string Link => "https://github.com/AlexW-578/CloseConfirm/";
         private static ModConfiguration Config;
 
@@ -30,7 +30,7 @@ namespace CloseConfirm
             harmony.PatchAll();
         }
 
-        [HarmonyPatch(typeof(Engine), "Shutdown")]
+        [HarmonyPatch(typeof(Engine), "RequestShutdown")]
         class Shutdown_Patch
         {
             public static bool Prefix(Engine __instance)
@@ -41,6 +41,7 @@ namespace CloseConfirm
                 }
                 if (Config.GetValue(ManualClose))
                 {
+                    Warn("Manual Close Detected - Closing Game.");
                     return true;
                 }
                 UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
@@ -52,16 +53,16 @@ namespace CloseConfirm
                     ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
                     dash.Target.CurrentScreen.Target = exit;
                     await new NextUpdate();
-                    Warn("Not Closing ");
+                    Warn("Caught and prevented close.");
                 });
                 return false;
             }
         }
 
-        [HarmonyPatch(typeof(NeosEnder), "OnAttach")]
+        [HarmonyPatch(typeof(AppEnder), "OnAttach")]
         class Confirm_Patch
         {
-            public static void Postfix(NeosEnder __instance)
+            public static void Postfix(AppEnder __instance)
             {
                 Config.Set(ManualClose,true);
             }
