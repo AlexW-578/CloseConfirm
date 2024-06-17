@@ -30,7 +30,7 @@ namespace CloseConfirm
             harmony.PatchAll();
         }
 
-        [HarmonyPatch(typeof(Engine), "Shutdown")]
+        [HarmonyPatch(typeof(Engine), "RequestShutdown")]
         class Shutdown_Patch
         {
             public static bool Prefix(Engine __instance)
@@ -52,7 +52,7 @@ namespace CloseConfirm
                     ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
                     dash.Target.CurrentScreen.Target = exit;
                     await new NextUpdate();
-                    Warn("Not Closing");
+                    Warn("Caught and prevented close.");
                 });
                 return false;
             }
