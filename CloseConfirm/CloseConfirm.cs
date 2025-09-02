@@ -8,7 +8,7 @@ namespace CloseConfirm
     {
         public override string Name => "CloseConfirm";
         public override string Author => "AlexW-578";
-        public override string Version => "1.1.0";
+        public override string Version => "1.1.1";
         public override string Link => "https://github.com/AlexW-578/CloseConfirm/";
         private static ModConfiguration Config;
 
