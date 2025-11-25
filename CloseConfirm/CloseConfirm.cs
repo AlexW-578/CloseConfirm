@@ -8,12 +8,14 @@ namespace CloseConfirm
     {
         public override string Name => "CloseConfirm";
         public override string Author => "AlexW-578";
-        public override string Version => "1.1.1";
+        public override string Version => "1.2.0";
         public override string Link => "https://github.com/AlexW-578/CloseConfirm/";
         private static ModConfiguration Config;
 
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> Enabled =
             new ModConfigurationKey<bool>("Enabled", "Enable/Disable the Mod", () => true);
+        [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> AllowCloseWhenDashExitOpen =
+            new ModConfigurationKey<bool>("Exit immediately when exit page already open", "Allows the game to exit as standard if the exit page is already open. (i.e. if you click the X button twice)", () => false);
 
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> ManualClose =
             new ModConfigurationKey<bool>("ManualClose", "ManualClose", () => false, true);
@@ -45,12 +47,20 @@ namespace CloseConfirm
                     return true;
                 }
                 UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
+                SyncRef<RadiantDash> dash = (SyncRef<RadiantDash>) userspaceRadiantDash.GetSyncMember(5);
+                ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
+                if (
+                    dash.Target.Open.Value 
+                    && dash.Target.CurrentScreen.Target == exit 
+                    && Config.GetValue(AllowCloseWhenDashExitOpen)
+                ) {
+                    Warn("Caught close, but the dash is already open, ignoring.");
+                    return true;
+                }
                 userspaceRadiantDash.StartTask(async ()=>
                 {
                     await new NextUpdate();
-                    SyncRef<RadiantDash> dash = (SyncRef<RadiantDash>) userspaceRadiantDash.GetSyncMember(5);
                     dash.Target.Open.Value = true;
-                    ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
                     dash.Target.CurrentScreen.Target = exit;
                     await new NextUpdate();
                     Warn("Caught and prevented close.");
