@@ -18,6 +18,8 @@ namespace CloseConfirm
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> AllowCloseWhenDashExitOpen =
             new ModConfigurationKey<bool>("Exit immediately when exit page already open", "Allows the game to exit as standard if the exit page is already open. (i.e. if you click the X button twice)", () => false);
 
+        [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> CatchEmergencyKeyBinds=
+            new ModConfigurationKey<bool>("Also catch emergency keybinds when LocalHome", "Also catch the emergency keybinds when in local home (Could be dangerous)", () => false);
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> ManualClose =
             new ModConfigurationKey<bool>("ManualClose", "ManualClose", () => false, true);
 
@@ -60,16 +62,25 @@ namespace CloseConfirm
             }
         }
 
-        [HarmonyPatch(typeof(AppEnder), "OnAttach")]
-        class Confirm_Patch
+        [HarmonyPatch(typeof(Userspace), nameof(Userspace.ExitApp))]
+        class Emergency_Patch
         {
-            public static void Postfix(AppEnder __instance)
+            public static bool Prefix(Engine __instance)
             {
                 Config.Set(ManualClose,true);
             }
         }
         
 
+                if (!Config.GetValue(CatchEmergencyKeyBinds))
+                {
+                    return true;
+                }
+
+                return CloseCatch();
+            }
+            
+        }
         private static bool CloseCatch()
         {
             UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
