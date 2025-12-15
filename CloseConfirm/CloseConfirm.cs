@@ -17,9 +17,11 @@ namespace CloseConfirm
             new ModConfigurationKey<bool>("Enabled", "Enable/Disable the Mod", () => true);
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> AllowCloseWhenDashExitOpen =
             new ModConfigurationKey<bool>("Exit immediately when exit page already open", "Allows the game to exit as standard if the exit page is already open. (i.e. if you click the X button twice)", () => false);
-
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> CatchEmergencyKeyBinds=
             new ModConfigurationKey<bool>("Also catch emergency keybinds when LocalHome", "Also catch the emergency keybinds when in local home (Could be dangerous)", () => false);
+        [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> CatchEmergencyKeyBindsWorld=
+            new ModConfigurationKey<bool>("Also catch emergency keybinds to leave current world", "Also catch the emergency keybinds (Could be dangerous)", () => false);
+        
         [AutoRegisterConfigKey] private static readonly ModConfigurationKey<bool> ManualClose =
             new ModConfigurationKey<bool>("ManualClose", "ManualClose", () => false, true);
 
@@ -67,16 +69,24 @@ namespace CloseConfirm
         {
             public static bool Prefix(Engine __instance)
             {
-                Config.Set(ManualClose,true);
-            }
-        }
-        
-
                 if (!Config.GetValue(CatchEmergencyKeyBinds))
                 {
                     return true;
                 }
 
+                return CloseCatch();
+            }
+            
+        }
+        [HarmonyPatch(typeof(Userspace), nameof(Userspace.ExitWorld))]
+        class EmergencyWorld_Patch
+        {
+            public static bool Prefix(Engine __instance)
+            {
+                if (!Config.GetValue(CatchEmergencyKeyBindsWorld))
+                {
+                    return true;
+                }
                 return CloseCatch();
             }
             
