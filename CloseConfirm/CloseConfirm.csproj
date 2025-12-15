@@ -3,7 +3,7 @@
     <RootNamespace>CloseConfirm</RootNamespace>
     <AssemblyName>CloseConfirm</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -20,6 +20,7 @@
     <ResonitePath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')">$(HOME)/.steam/steam/steamapps/common/Resonite/</ResonitePath>
     <ResonitePath Condition="Exists('E:\SteamLibrary\steamapps\common\Resonite\')">E:\SteamLibrary\steamapps\common\Resonite\</ResonitePath>
     <ResonitePath Condition="Exists('F:\SteamLibrary\steamapps\common\Resonite\')">F:\SteamLibrary\steamapps\common\Resonite\</ResonitePath>
+    <ResonitePath Condition="Exists('D:\SteamLibrary\steamapps\common\Resonite\')">D:\SteamLibrary\steamapps\common\Resonite\</ResonitePath>
   </PropertyGroup>
   
   <ItemGroup>
