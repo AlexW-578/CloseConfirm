@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using ResoniteModLoader;
 using FrooxEngine;
 
@@ -31,8 +32,17 @@ namespace CloseConfirm
             Harmony harmony = new Harmony("co.uk.AlexW-578.CloseConfirm");
             harmony.PatchAll();
         }
-
-        [HarmonyPatch(typeof(Engine), "RequestShutdown")]
+        
+        [HarmonyPatch(typeof(AppEnder), "OnAttach")]
+        class Confirm_Patch
+        {
+            public static void Postfix(AppEnder __instance)
+            {
+                Config.Set(ManualClose,true);
+            }
+        }
+        
+        [HarmonyPatch(typeof(Engine), nameof(Engine.RequestShutdown))]
         class Shutdown_Patch
         {
             public static bool Prefix(Engine __instance)
@@ -46,26 +56,7 @@ namespace CloseConfirm
                     Warn("Manual Close Detected - Closing Game.");
                     return true;
                 }
-                UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
-                SyncRef<RadiantDash> dash = (SyncRef<RadiantDash>) userspaceRadiantDash.GetSyncMember(5);
-                ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
-                if (
-                    dash.Target.Open.Value 
-                    && dash.Target.CurrentScreen.Target == exit 
-                    && Config.GetValue(AllowCloseWhenDashExitOpen)
-                ) {
-                    Warn("Caught close, but the dash is already open, ignoring.");
-                    return true;
-                }
-                userspaceRadiantDash.StartTask(async ()=>
-                {
-                    await new NextUpdate();
-                    dash.Target.Open.Value = true;
-                    dash.Target.CurrentScreen.Target = exit;
-                    await new NextUpdate();
-                    Warn("Caught and prevented close.");
-                });
-                return false;
+                return CloseCatch();
             }
         }
 
@@ -79,5 +70,28 @@ namespace CloseConfirm
         }
         
 
+        private static bool CloseCatch()
+        {
+            UserspaceRadiantDash userspaceRadiantDash = Userspace.UserspaceWorld.GetRadiantDash();
+            SyncRef<RadiantDash> dash = (SyncRef<RadiantDash>) userspaceRadiantDash.GetSyncMember(5);
+            ExitScreen exit = dash.Target.GetScreen<ExitScreen>();
+            if (
+                dash.Target.Open.Value 
+                && dash.Target.CurrentScreen.Target == exit 
+                && Config.GetValue(AllowCloseWhenDashExitOpen)
+            ) {
+                Warn("Caught close, but the dash is already open, ignoring.");
+                return true;
+            }
+            userspaceRadiantDash.StartTask(async ()=>
+            {
+                await new NextUpdate();
+                dash.Target.Open.Value = true;
+                dash.Target.CurrentScreen.Target = exit;
+                await new NextUpdate();
+                Warn("Caught emergency keybind and prevented close.");
+            });
+            return false;
+        }
     }
 }
