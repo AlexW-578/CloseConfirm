@@ -110,7 +110,7 @@ namespace CloseConfirm
                 dash.Target.Open.Value = true;
                 dash.Target.CurrentScreen.Target = exit;
                 await new NextUpdate();
-                Warn("Caught emergency keybind and prevented close.");
+                Warn("Caught Close and prevented close.");
             });
             return false;
         }
